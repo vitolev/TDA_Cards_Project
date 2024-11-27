@@ -3,3 +3,4 @@ This is the project for subject Topological Data Analysis in year 2024/25 at Fac
 
 ### Authors
 - Vito Levstik
+- Timotej Zgonik
