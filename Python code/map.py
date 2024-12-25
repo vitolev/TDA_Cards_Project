@@ -45,12 +45,12 @@ class Map:
         elif self.type == "torus":
             ...
 
-    def plot(self):
+    def plot(self, color=False):
         plt.clf()
         for j in range(len(self.tiles)):
             for i in range(len(self.tiles[j])):
                 t = self.tiles[j][i]
-                t.plot()
+                t.plot(color=color)
         
         plt.axis('equal')
         plt.show()

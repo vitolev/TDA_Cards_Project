@@ -3,7 +3,7 @@ from map import Map
 import copy
 import random
 
-# First two tiles
+#region All tiles
 t1 = Tile([(0,0),(3,0),(3,3),(0,3),(1,0),(2,0),(0,1),(0,2),(1,3),(2,3),(3,1),(3,2),(1.5,1.5)], 
         [(11, 12), (8, 9), (7, 12), (1, 10), (10, 11), (1, 5), (5, 12), (2, 9), (10, 12), 
         (6, 7), (8, 12), (2, 11), (7, 8), (4, 5), (0, 4), (3, 7), (6, 12), (5, 10), (4, 6), 
@@ -87,21 +87,23 @@ t14 = Tile([(0.0,0.0),(3.0,0.0),(3.0,3.0),(0.0,3.0),(1.0,0.0),(2.0,0.0),(0.0,1.0
             (7, 8), (13, 14), (8, 13), (4, 5), (5, 15), (6, 14), (0, 4), (10, 15), (3, 7), (13, 15), (5, 10), 
             (4, 6), (12, 14), (9, 11), (12, 13), (9, 13), (0, 6), (4, 14), (12, 15), (3, 8), (4, 12), (9, 15)],
             [5,31,13,26,0,16,9,18])
-
+#endregion
 
 l = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14] # List of all tiles
 
 random.seed(3)
 
+random.shuffle(l)
+
 map = Map(7, 2, "plane")   # Possible types: "plane", "cylinder", "torus"
 
 for j in range(map.m):
     for i in range(map.n):
-        t = copy.copy(l[i+(1-j)*7])
+        t = copy.copy(l[i+j*7])
         t.x = i
         t.y = j
         map.setTile(t, i, j)
 
 map.updateNeighbours()
 
-map.plot()
+map.plot(color=True)
