@@ -1,5 +1,5 @@
-from tile import Tile
-from map import Map
+from tile import *
+from map import *
 import copy
 import random
 
@@ -91,11 +91,11 @@ t14 = Tile([(0.0,0.0),(3.0,0.0),(3.0,3.0),(0.0,3.0),(1.0,0.0),(2.0,0.0),(0.0,1.0
 
 l = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14] # List of all tiles
 
-random.seed(3)
+random.seed(52)
 
 random.shuffle(l)
 
-map = Map(7, 2, "plane")   # Possible types: "plane", "cylinder", "torus"
+map = Map(7, 2, "torus")   # Possible types: "plane", "cylinder", "torus"
 
 for j in range(map.m):
     for i in range(map.n):
@@ -105,5 +105,5 @@ for j in range(map.m):
         map.setTile(t, i, j)
 
 map.updateNeighbours()
-
+print("Number of 1-dimensional components (simple closed curves): ", count_1d_components(map))
 map.plot(color=True)

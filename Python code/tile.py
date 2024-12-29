@@ -42,7 +42,7 @@ class Tile:
         self.y = 0
 
         # Size of the tile. As the tile is always square, this is just max of x or y coordinate of the points.
-        self.size = max(self.points, key=lambda x: x[0])[0] + 1
+        self.size = max(self.points, key=lambda x: x[0])[0]
 
     def __str__(self):
         return f"Tile at ({self.x}, {self.y})"
@@ -103,8 +103,8 @@ class Tile:
         return triangle_colors
 
     def plot(self, clear=False, show=False, color=False):
-        x = self.x * (self.size - 1)
-        y = self.y * (self.size - 1)
+        x = self.x * self.size
+        y = self.y * self.size
 
         if clear:
             plt.clf()
