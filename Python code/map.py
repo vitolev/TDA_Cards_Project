@@ -201,7 +201,6 @@ def count_1d_components(tile_map: Map) -> int:
 
     return loops
 
-
 def visualize_graph(graph):
     """
     Visualizes the graph using networkx and matplotlib.
