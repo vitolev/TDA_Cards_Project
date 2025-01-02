@@ -95,7 +95,7 @@ random.seed(50)
 
 random.shuffle(l)
 
-map = Map(7, 2, "cylinder")   # Possible types: "plane", "cylinder", "torus"
+map = Map(7, 2, "plane")   # Possible types: "plane", "cylinder", "torus"
 
 for j in range(map.m):
     for i in range(map.n):
@@ -105,5 +105,5 @@ for j in range(map.m):
         map.setTile(t, i, j)
 
 map.updateNeighbours()
-print("Number of 1-dimensional components (simple closed curves): ", count_1d_components(map))
+print("Tuple of 1-dimensional components (closed curves, open curves): ", count_1d_components(map))
 map.plot(color=True)

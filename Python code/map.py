@@ -86,13 +86,13 @@ class Map:
 ####################################################################################################
 def count_1d_components(tile_map: Map) -> int:
     """
-    Counts the number of 1-dimensional components (simple closed curves) in a map of tiles.
+    Counts the number of 1-dimensional components in a map of tiles.
 
     Args:
         tile_map: A Map of Tile objects.
 
     Returns:
-        int: The number of simple closed curves.
+        (int, int): Tuple of number of simple closed curves and non-closed curves.
     """
 
     # Helper function to compute global coordinates of a point
@@ -169,13 +169,13 @@ def count_1d_components(tile_map: Map) -> int:
 
     #visualize_graph(graph)
 
-    # Identify closed loops using DFS
-    visited = set()
-    loops = 0
-
-    def find_cycle(point):
+    def path_type(point):
         """
         Determines if starting at `point`, we can find a simple closed curve (cycle).
+        Returns:
+            - "Loop" if a cycle (closed curve) is found.
+            - "Open" if it's an open path (non-closed curve).
+            - None if the point beloongs to a previously detected path.
         """
         current = point
         prev = None  # Keep track of the previous point to avoid reversing the path
@@ -183,23 +183,32 @@ def count_1d_components(tile_map: Map) -> int:
             visited.add(current)
             neighbours = graph[current]  # At most length 2 (every point has at most 2 connections)
             if len(neighbours) < 2:
-                return False  # Open path, not a cycle
+                return "Open"  # Open path, not a cycle
             # Find the next point in the path that isn't the previous point
             next_point = neighbours[0] if neighbours[0] != prev else neighbours[1]
             if next_point in visited:
                 if next_point == point:
-                    return True  # Cycle found
-                return False  # Visited point that isn't the start, not a cycle
+                    return "Loop"  # Cycle found
+                return None  # Already visited point, not a cycle
             prev = current
             current = next_point
+
+    # Initialize counters for loops (closed curves) and open paths (non-closed curves)
+    loops = 0
+    open_paths = 0
+
+    visited = set()
 
     # Traverse all nodes
     for point in graph.keys():
         if point not in visited:
-            if find_cycle(point):  # If a cycle is detected
+            type = path_type(point)
+            if type == "Loop":  # If a cycle is detected
                 loops += 1
+            elif type == "Open":  # If it's an open path
+                open_paths += 1
 
-    return loops
+    return (loops, open_paths / 2) # We overcounted open paths by a factor of 2
 
 def visualize_graph(graph):
     """
