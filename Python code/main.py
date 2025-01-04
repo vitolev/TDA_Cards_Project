@@ -100,10 +100,9 @@ map = Map(7, 2, "plane")   # Possible types: "plane", "cylinder", "torus"
 for j in range(map.m):
     for i in range(map.n):
         t = copy.copy(l[i+j*7])
-        t.x = i
-        t.y = j
         map.setTile(t, i, j)
+map.updateNeighbours()  # Neighbours are set after all tiles are placed
 
-map.updateNeighbours()
-print("Tuple of 1-dimensional components (closed curves, open curves): ", count_1d_components(map))
+print("Tuple of 1-dimensional components (closed curves, open curves): ", map.count_1d_components())
+print("Number of 2-dimensional components (water, land): ", map.count_2d_components())
 map.plot(color=True)
