@@ -95,6 +95,7 @@ l = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14] # List of all 
 mask = [0,1,2,3,4,5,6,7,8,9,10,11,12,13] # Mask of all tiles
 mask_set = set()
 random.seed(50)
+random.shuffle(mask)
 
 map = Map(7, 2, "torus")
 
@@ -105,6 +106,8 @@ for j in range(map.m):
 
 # Neighbours are set after all tiles are placed
 map.updateNeighbours()
+print(map.count_1d_components())
+print(map.count_2d_components())
 map.plot(color=True)
 
 """
