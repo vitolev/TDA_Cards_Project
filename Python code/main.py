@@ -2,6 +2,7 @@ from tile import *
 from map import *
 import copy
 import random
+import csv
 
 #region All tiles
 t1 = Tile([(0,0),(3,0),(3,3),(0,3),(1,0),(2,0),(0,1),(0,2),(1,3),(2,3),(3,1),(3,2)], 
@@ -91,18 +92,100 @@ t14 = Tile([(0.0,0.0),(3.0,0.0),(3.0,3.0),(0.0,3.0),(1.0,0.0),(2.0,0.0),(0.0,1.0
 
 l = [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14] # List of all tiles
 
+mask = [0,1,2,3,4,5,6,7,8,9,10,11,12,13] # Mask of all tiles
+mask_set = set()
 random.seed(50)
 
-random.shuffle(l)
-
-map = Map(7, 2, "plane")   # Possible types: "plane", "cylinder", "torus"
+map = Map(7, 2, "torus")
 
 for j in range(map.m):
     for i in range(map.n):
-        t = copy.copy(l[i+j*7])
+        t = copy.copy(l[mask[i+j*7]])
         map.setTile(t, i, j)
-map.updateNeighbours()  # Neighbours are set after all tiles are placed
 
-print("Tuple of 1-dimensional components (closed curves, open curves): ", map.count_1d_components())
-print("Number of 2-dimensional components (water, land): ", map.count_2d_components())
+# Neighbours are set after all tiles are placed
+map.updateNeighbours()
 map.plot(color=True)
+
+"""
+while True:
+    random.shuffle(mask)
+    mask_tuple = tuple(mask)
+    if mask_tuple in mask_set:
+        continue
+    
+    mask_set.add(mask_tuple)
+
+    plane = Map(7, 2, "plane")   # Possible types: "plane", "cylinder", "torus"
+    cylinder = Map(7, 2, "cylinder")
+    torus = Map(7, 2, "torus")
+
+    for j in range(plane.m):
+        for i in range(plane.n):
+            t = copy.copy(l[mask[i+j*7]])
+            plane.setTile(t, i, j)
+
+            t = copy.copy(l[mask[i+j*7]])
+            cylinder.setTile(t, i, j)
+
+            t = copy.copy(l[mask[i+j*7]])
+            torus.setTile(t, i, j)
+
+    # Neighbours are set after all tiles are placed
+    plane.updateNeighbours()  
+    cylinder.updateNeighbours()
+    torus.updateNeighbours()
+
+    # Open a CSV file in write mode
+    with open('plane.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+
+        plane_1d = plane.count_1d_components()
+        loops = plane_1d[0]
+        open_path = plane_1d[1]
+        components_1d = plane_1d[2]
+
+        plane_2d = plane.count_2d_components()
+        water = plane_2d[0]
+        land = plane_2d[1]
+        components_2d = plane_2d[2]
+
+        # Write the data
+        writer.writerow([loops, open_path, components_1d, water, land, components_2d, mask_tuple])
+
+    # Open a CSV file in write mode
+    with open('cylinder.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+
+        plane_1d = cylinder.count_1d_components()
+        loops = plane_1d[0]
+        open_path = plane_1d[1]
+        components_1d = plane_1d[2]
+
+        plane_2d = cylinder.count_2d_components()
+        water = plane_2d[0]
+        land = plane_2d[1]
+        components_2d = plane_2d[2]
+
+        # Write the data
+        writer.writerow([loops, open_path, components_1d, water, land, components_2d, mask_tuple])
+
+    # Open a CSV file in write mode
+    with open('torus.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+
+        plane_1d = torus.count_1d_components()
+        loops = plane_1d[0]
+        open_path = plane_1d[1]
+        components_1d = plane_1d[2]
+
+        plane_2d = torus.count_2d_components()
+        water = plane_2d[0]
+        land = plane_2d[1]
+        components_2d = plane_2d[2]
+
+        # Write the data
+        writer.writerow([loops, open_path, components_1d, water, land, components_2d, mask_tuple])
+"""
+
+

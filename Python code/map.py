@@ -85,7 +85,7 @@ class Map:
         plt.axis('equal')
         plt.show()
 
-    def count_1d_components(self) -> int:
+    def count_1d_components(self):
         """
         Counts the number of 1-dimensional components in a map of tiles.
 
@@ -163,8 +163,6 @@ class Map:
                                 graph[p1_global].append(p2_global)
                                 graph[p2_global].append(p1_global)
 
-        #visualize_graph(graph)
-
         def path_type(point):
             """
             Determines if starting at `point`, we can find a simple closed curve (cycle).
@@ -204,9 +202,23 @@ class Map:
                 elif type == "Open":  # If it's an open path
                     open_paths += 1
 
-        return (loops, open_paths / 2) # We overcounted open paths by a factor of 2
+        # Create a networkx graph
+        G = nx.Graph()
 
-    def count_2d_components(self) -> int:
+        # Add all nodes to the graph
+        for node in graph.keys():
+            G.add_node(node)
+
+        # Add edges to the graph
+        for node, neighbors in graph.items():
+            for neighbor in neighbors:
+                G.add_edge(node, neighbor)
+
+        components = list(nx.connected_components(G))
+
+        return (loops, int(open_paths / 2), len(components)) # We overcounted open paths by a factor of 2
+
+    def count_2d_components(self):
         # Graph structure to store all connections
         graph = defaultdict(list)
 
@@ -250,7 +262,7 @@ class Map:
                 water += 1
             else:
                 land += 1
-        return (water, land)
+        return (water, land, len(components))
 
 ####################################################################################################        
 def visualize_graph(graph):
